@@ -1,0 +1,21 @@
+STRING version 1.0--LOOP TO CHANGE STRING TEXT
+
+void functionName(string& stringVariable) {
+   for (int i = 0; i < stringVariable.size(); ++i) {
+         if (stringVariable.at(i) == 'oldChar') {
+            stringVariable.at(i) = 'newChar';
+         }
+      }
+}
+
+// Example: Change all lowercase 'a' to uppercase 'A' in a string
+
+CHAR ARRAY version 1.0--LOOP TO CHANGE STRING TEXT
+
+void functionName(char* stringVariable) {
+   for (int i = 0; i < strlen(stringVariable); ++i) {
+         if (stringVariable[i] == 'oldChar') {
+            stringVariable[i] = 'newChar';
+         }
+      }
+}

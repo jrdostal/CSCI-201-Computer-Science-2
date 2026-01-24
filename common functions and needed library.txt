@@ -1,0 +1,16 @@
+Function 	Header File 	Purpose 	Parameter(s) Type 	Result
+abs(x) 	<cmath> 	Returns the absolute value of its argument: abs(-7) = 7 	int ( double ) 	int ( double )
+ceil(x) 	<cmath> 	Returns the smallest whole number that is not less than x: ceil(56.34) = 57.0 	double 	double
+cos(x) 	<cmath> 	Returns the cosine of angle x: cos(0.0) = 1.0 	double (radians) 	double
+exp(x) 	<cmath> 	Returns ex , where e = 2.718: exp(1.0) = 2.71828 	double 	double
+fabs(x) 	<cmath> 	Returns the absolute value of its argument: fabs(-5.67) = 5.67 	double 	double
+floor(x) 	<cmath> 	Returns the largest whole number that is not greater than x: floor(45.67) = 45.00 	double 	double
+islower(x) 	<cctype> 	Returns true if x is a lowercase letter; otherwise it returns false ; islower('h') is true 	int 	int
+isupper(x) 	<cctype> 	Returns true if x is a uppercase letter; otherwise it returns false ; isupper('K') is true 	int 	int
+pow(x, y) 	<cmath> 	Returns xy ; If x is negative, y must be a whole number: pow(0.16, 0.5) = 0.4 	double 	double
+sqrt(x) 	<cmath> 	Returns the nonnegative square root of x, x must be nonnegative: sqrt(4.0) = 2.0 	double 	double
+tolower(x) 	<cctype> 	Returns the lowercase value of x if x is uppercase; otherwise, returns x 	int 	int
+toupper(x) 	<cctype> 	Returns the uppercase value of x if x is lowercase; otherwise, returns x 	int 	int
+
+
+cout << fixed << setprecision(x); 	<iomanip> 	Sets the output to fixed-point notation with x digits to the right of the decimal point. 	N/A 	N/A
