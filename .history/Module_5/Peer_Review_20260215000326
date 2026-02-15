@@ -1,0 +1,35 @@
+//SECTION - 1: standard library includes
+
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+//SECTION - 2: Main function
+int main() {
+
+    //SECTION - 3: Variable declarations
+   int seedVal;
+   int limitValue;
+	int data1;
+	int data2;
+	int data3;
+   int sum;
+
+   cin >> seedVal;
+   cin >> limitValue;
+
+   srand(seedVal);
+
+    data1 = rand() % limitValue;
+    data2 = rand() % limitValue;
+    data3 = rand() % limitValue;
+
+	sum = data1 + data2 + data3;
+
+	cout << data1 << endl;
+	cout << data2 << endl;
+	cout << data3 << endl;
+	cout << "Sum: " << sum << endl;
+
+   return 0;
+}

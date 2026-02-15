@@ -1,0 +1,48 @@
+//SECTION - 1: standard library includes
+
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+
+//SECTION - 2: Main function
+int main() {
+
+    //SECTION - 3: Variable declarations
+    // variables for seed value, limit value, three random data values, and their sum
+    int seedVal;
+    int limitValue;
+	int data1;
+	int data2;
+	int data3;
+    int sum;
+
+    //SECTION - 4: Input and processing
+    // prompt user for seed value and limit value
+    cin >> seedVal;
+    cin >> limitValue;
+    
+    //SECTION - 5: Random number generation
+    // set the seed for random number generation using srand function
+    srand(seedVal);
+
+    //SECTION - 6: Generate three random numbers
+    // generate three random numbers using rand function and limit them to the specified limit value
+    data1 = rand() % limitValue;
+    data2 = rand() % limitValue;
+    data3 = rand() % limitValue;
+
+    //SECTION - 7: Calculate the sum of the three random numbers
+    // calculate the sum of the three random numbers
+	sum = data1 + data2 + data3;
+
+    //SECTION - 8: Output the results
+    // output the three random numbers and their sum
+	cout << data1 << endl;
+	cout << data2 << endl;
+	cout << data3 << endl;
+	cout << "Sum: " << sum << endl;
+
+    //SECTION - 9: End of program
+    //end the program
+    return 0;
+}
