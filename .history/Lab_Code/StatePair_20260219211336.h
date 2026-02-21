@@ -1,0 +1,58 @@
+#ifndef STATEPAIR
+#define STATEPAIR
+
+template<typename T1, typename T2>
+class StatePair {
+    
+public:
+// TODO: Define constructors
+    StatePair();
+    StatePair(T1 userKey, T2 userValue);
+    ~StatePair();
+   
+// TODO: Define mutators, and accessors for StatePair
+    void SetKey(T1 userKey);
+    void SetValue(T2 userValue);
+    T1 GetKey();
+    T2 GetValue();
+	
+// TODO: Define PrintInfo() method
+    void PrintInfo();
+    
+private:
+    T1 key;
+    T2 value;
+
+};
+
+void StatePair::SetKey(T1 userKey) {
+    key = userKey;
+}
+
+void StatePair::SetValue(T2 userValue) {
+    value = userValue;
+}
+
+T1 StatePair::GetKey() {
+    return key;
+}
+
+T2 StatePair::GetValue() {
+    return value;
+}
+
+void StatePair::PrintInfo() {
+    cout << key << " " << value << endl;
+}
+
+StatePair::StatePair(T1 userKey, T2 userValue) {
+    SetKey(userKey);
+    SetValue(userValue);
+}
+
+StatePair::StatePair() {
+    key = 0;
+    value = 0;
+ }
+
+#endif //STATEPAIR

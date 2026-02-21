@@ -1,0 +1,27 @@
+#ifndef STATEPAIR
+#define STATEPAIR
+
+template<typename T1, typename T2>
+class StatePair {
+    
+public:
+// TODO: Define constructors
+   StatePair();
+   StatePair(T1 userKey, T2 userValue);
+   ~StatePair();
+   
+// TODO: Define mutators, and accessors for StatePair
+   void SetKey(T1 key);
+   void SetValue(T2 value);
+   T1 GetKey();
+   T2 GetValue();
+	
+// TODO: Define PrintInfo() method
+    void PrintInfo();
+
+private:
+    T1 key;
+    T2 value;
+};
+
+#endif
