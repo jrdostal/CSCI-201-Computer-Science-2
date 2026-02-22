@@ -32,15 +32,9 @@ class Server {
 //SECTION - Public members of the Server class
 // The constructor takes an integer port number as an argument and initializes the server's port member variable. The start method is responsible for setting up the server to listen for incoming connections and handling client requests.
 public:
-
     // SECTION - Constructor for the Server class
     // The constructor takes an integer port number as an argument and initializes the server's port member variable. The port member variable will be used to specify the port on which the server will listen for incoming connections from clients. The constructor also initializes the stateMap with state abbreviations and their corresponding long names, which will be used to look up the full state name based on the abbreviation received from the client.
     Server(int port);
-
-    //SECTION - Destructor for the Server class
-    // The destructor is defined to perform any necessary cleanup when a Server object is destroyed. In this case, it is left empty as there are no specific resources that need to be released when the Server object is destroyed. However, it is good practice to define a destructor in case any future modifications to the Server class require cleanup of resources.
-    ~Server() {}
-
     //SECTION - Start method for the Server class
     // The start method is responsible for setting up the server to listen for incoming connections and handling client requests. It initializes Winsock, creates a listening socket, binds it to the specified port, and listens for incoming connections. When a client connects, it receives the state abbreviation, looks it up in the stateMap, and sends back the corresponding full state name or an error message if the abbreviation is invalid. After handling the client request, it closes the client socket and continues to wait for new connections.
     void start();
@@ -49,7 +43,6 @@ public:
 // The port member variable stores the port number on which the server will listen for incoming connections. The stateMap is an unordered map that holds state abbreviations as keys and their corresponding long names as values, which will be used to look up the full state name based on the abbreviation received from the client.
 private:
 
-    //SECTION - Member variables for the Server class
     // Member variable to store the port number on which the server will listen for incoming connections
     int port;
     // An unordered map to store state abbreviations as keys and their corresponding long names as values
@@ -57,5 +50,4 @@ private:
 };
 
 //SECTION - End of the Server class declaration
-// The include guard is closed here to prevent multiple inclusions of this header file.
 #endif // SERVER_H

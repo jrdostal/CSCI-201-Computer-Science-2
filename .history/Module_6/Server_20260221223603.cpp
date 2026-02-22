@@ -18,9 +18,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+
 using namespace std;
 
-//SECTION - Definition of the Server class constructor
+//SECTION - 
 // Constructor to initialize the server with a specific port
 Server::Server(int port) : port(port) {
     // Initialize the state map with state abbreviations and their corresponding full names
@@ -79,100 +80,67 @@ Server::Server(int port) : port(port) {
 //SECTION - The start method sets up the server to listen for incoming connections, accepts client requests, processes the state abbreviation sent by the client, and sends back the appropriate response. The server runs in an infinite loop to handle multiple client connections sequentially.
 // The start method initializes Winsock, creates a listening socket, binds it to the specified port, and listens for incoming connections. When a client connects, it receives the state abbreviation, looks it up in the stateMap, and sends back the corresponding full state name or an error message if the abbreviation is invalid. After handling the client request, it closes the client socket and continues to wait for new connections.
 void Server::start() {
-
-    //SECTION - Initialize Winsock
-    // Initialize Winsock to use the Windows Sockets API for network communication. The WSAStartup function is called to initialize the Winsock library, and the WSADATA structure is used to store information about the Windows Sockets implementation.
+    // Initialize Winsock
     WSADATA wsaData;
-    // Check if Winsock initialization was successful
     if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
         cerr << "WSAStartup failed" << endl;
         return;
     }
-
-    //SECTION - Create a socket
-    // Create a socket for listening to incoming connections. The socket is created using the IPv4 address family (AF_INET) and the TCP protocol (SOCK_STREAM). The resulting socket descriptor is stored in listenSocket.
+    // Create a socket
     SOCKET listenSocket = socket(AF_INET, SOCK_STREAM, 0);
-    // Check if socket creation was successful
     if (listenSocket == INVALID_SOCKET) {
         cerr << "Failed to create socket" << endl;
         WSACleanup();
         return;
     }
-
-    //SECTION - Set up the server address structure
-    // Set up the server address structure to bind the socket to the specified port and listen for incoming connections on any available network interface. The server will use IPv4 addressing (AF_INET) and TCP protocol (SOCK_STREAM).
+    // Set up the server address structure
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = INADDR_ANY;
-
-    //SECTION - Bind the socket to the address and port
-    // Bind the socket to the address and port specified in the serverAddress structure. This allows the server to listen for incoming connections on the specified port. The bind function is called to associate the socket with the address and port, and error handling is included to check if the binding was successful.
-    // Check if binding was successful
+    // Bind the socket to the address and port
     if (bind(listenSocket, (sockaddr*)&serverAddress, sizeof(serverAddress)) == SOCKET_ERROR) {
         cerr << "Bind failed" << endl;
         closesocket(listenSocket);
         WSACleanup();
         return;
     }
-
-    //SECTION - Listen for incoming connections
-    // Listen for incoming connections on the bound socket. The listen function is called to mark the socket as a passive socket that will be used to accept incoming connection requests. The SOMAXCONN constant is used to specify the maximum length of the queue of pending connections. Error handling is included to check if the listen operation was successful, and a message is printed to indicate that the server is now listening on the specified port.
-    // Check if listening was successful
+    // Listen for incoming connections
     if (listen(listenSocket, SOMAXCONN) == SOCKET_ERROR) {
         cerr << "Listen failed" << endl;
         closesocket(listenSocket);
         WSACleanup();
         return;
     }
-    // Output a message indicating that the server is listening on the specified port
     cout << "Server listening on port " << port << endl;
-
-    //SECTION - Accept incoming connections
-    // Accept incoming connections in an infinite loop. The accept function is called to wait for and accept a client connection. When a client connects, the server receives the client's address information and creates a new socket for communication with the client. Error handling is included to check if accepting the client connection was successful, and a message is printed to indicate that a client has connected.
+    // Accept incoming connections
     while (true) {
-        // Accept a client connection
         sockaddr_in clientAddress;
         int clientAddressSize = sizeof(clientAddress);
         SOCKET clientSocket = accept(listenSocket, (sockaddr*)&clientAddress, &clientAddressSize);
-        // Check if accepting the client connection was successful
         if (clientSocket == INVALID_SOCKET) {
             cerr << "Accept failed" << endl;
             continue;
         }
-        // Output a message indicating that a client has connected
         cout << "Client connected" << endl;
         // Handle the client in a separate thread
         char buffer[1024] = {0};
         int bytesReceived = recv(clientSocket, buffer, 1024, 0);
-        // Check if data was received successfully from the client
         if (bytesReceived > 0) {
             string abbreviation(buffer, bytesReceived);
-            // Output the received abbreviation for debugging purposes
             cout << "Received abbreviation: " << abbreviation << endl;
             string response;
-            // Look up the abbreviation in the stateMap and prepare the response
             if (stateMap.find(abbreviation) != stateMap.end()) {
                 response = stateMap[abbreviation];
-            }
-            // If the abbreviation is not found in the stateMap, prepare an error response
-            else {
+            } else {
                 response = "Error: Invalid state abbreviation";
             }
-            // Send the response back to the client
             send(clientSocket, response.c_str(), response.size(), 0);
-        }
-        // If receiving data from the client failed, output an error message
-        else {
+        } else {
             cerr << "Failed to receive data from client" << endl;
         }
-        // Close the client socket after handling the request
         closesocket(clientSocket);
     }
-
-    //SECTION - Close the listening socket and clean up Winsock before exiting the server
-    // Close the listening socket and clean up Winsock before exiting the server to free up resources. The closesocket function is called to close the listening socket, and the WSACleanup function is called to clean up the Winsock library before the server exits.
     closesocket(listenSocket);
-    // Cleanup Winsock before exiting the server to free up resources
     WSACleanup();
 }

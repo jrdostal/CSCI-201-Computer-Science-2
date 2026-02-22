@@ -24,32 +24,19 @@ using namespace std;
 //SECTION - Declaration of the Client class
 // The Client class encapsulates the functionality of the client, including connecting to the server, sending state abbreviations, and receiving responses from the server.
 class Client {
-
 //SECTION - Public members of the Client class
 public:
-
     //SECTION - Constructor for the Client class
     // The constructor takes the server's IP address and port number as arguments and initializes the corresponding member variables. The serverIp member variable stores the IP address of the server, and the port member variable stores the port number on which the server is listening for incoming connections.
     Client(const string& serverIp, int port);
-
-    //SECTION - Destructor for the Client class
-    // The destructor is defined to perform any necessary cleanup when a Client object is destroyed. In this case, it is left empty as there are no specific resources that need to be released when the Client object is destroyed. However, it is good practice to define a destructor in case any future modifications to the Client class require cleanup of resources.
-    ~Client() {}
-
     //SECTION - Run method for the Client class
     // The run method is responsible for connecting to the server, sending state abbreviations, and receiving responses from the server. It initializes Winsock, creates a socket, connects to the server, sends the user input (state abbreviation), receives the response from the server, and prints it to the screen. The method also includes error handling for socket operations and allows the user to exit the program gracefully.
     void run();
 
 //SECTION - Private members of the Client class
 private:
-
-    //SECTION - Member variables for the Client class
-    //Member variable to store the IP address of the server
     string serverIp;
-    // Member variable to store the port number on which the server is listening for incoming connections
     int port;
 };
 
-//SECTION - End of the Client class declaration
-// The include guard is closed here to prevent multiple inclusions of this header file.
 #endif // CLIENT_H

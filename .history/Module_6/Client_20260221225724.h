@@ -31,7 +31,6 @@ public:
     //SECTION - Constructor for the Client class
     // The constructor takes the server's IP address and port number as arguments and initializes the corresponding member variables. The serverIp member variable stores the IP address of the server, and the port member variable stores the port number on which the server is listening for incoming connections.
     Client(const string& serverIp, int port);
-
     //SECTION - Destructor for the Client class
     // The destructor is defined to perform any necessary cleanup when a Client object is destroyed. In this case, it is left empty as there are no specific resources that need to be released when the Client object is destroyed. However, it is good practice to define a destructor in case any future modifications to the Client class require cleanup of resources.
     ~Client() {}

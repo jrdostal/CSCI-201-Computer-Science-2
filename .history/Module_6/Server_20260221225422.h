@@ -49,7 +49,6 @@ public:
 // The port member variable stores the port number on which the server will listen for incoming connections. The stateMap is an unordered map that holds state abbreviations as keys and their corresponding long names as values, which will be used to look up the full state name based on the abbreviation received from the client.
 private:
 
-    //SECTION - Member variables for the Server class
     // Member variable to store the port number on which the server will listen for incoming connections
     int port;
     // An unordered map to store state abbreviations as keys and their corresponding long names as values
@@ -57,5 +56,4 @@ private:
 };
 
 //SECTION - End of the Server class declaration
-// The include guard is closed here to prevent multiple inclusions of this header file.
 #endif // SERVER_H

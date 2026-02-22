@@ -79,7 +79,6 @@ Server::Server(int port) : port(port) {
 //SECTION - The start method sets up the server to listen for incoming connections, accepts client requests, processes the state abbreviation sent by the client, and sends back the appropriate response. The server runs in an infinite loop to handle multiple client connections sequentially.
 // The start method initializes Winsock, creates a listening socket, binds it to the specified port, and listens for incoming connections. When a client connects, it receives the state abbreviation, looks it up in the stateMap, and sends back the corresponding full state name or an error message if the abbreviation is invalid. After handling the client request, it closes the client socket and continues to wait for new connections.
 void Server::start() {
-
     //SECTION - Initialize Winsock
     // Initialize Winsock to use the Windows Sockets API for network communication. The WSAStartup function is called to initialize the Winsock library, and the WSADATA structure is used to store information about the Windows Sockets implementation.
     WSADATA wsaData;
@@ -88,7 +87,6 @@ void Server::start() {
         cerr << "WSAStartup failed" << endl;
         return;
     }
-
     //SECTION - Create a socket
     // Create a socket for listening to incoming connections. The socket is created using the IPv4 address family (AF_INET) and the TCP protocol (SOCK_STREAM). The resulting socket descriptor is stored in listenSocket.
     SOCKET listenSocket = socket(AF_INET, SOCK_STREAM, 0);
@@ -98,14 +96,12 @@ void Server::start() {
         WSACleanup();
         return;
     }
-
     //SECTION - Set up the server address structure
     // Set up the server address structure to bind the socket to the specified port and listen for incoming connections on any available network interface. The server will use IPv4 addressing (AF_INET) and TCP protocol (SOCK_STREAM).
     sockaddr_in serverAddress;
     serverAddress.sin_family = AF_INET;
     serverAddress.sin_port = htons(port);
     serverAddress.sin_addr.s_addr = INADDR_ANY;
-
     //SECTION - Bind the socket to the address and port
     // Bind the socket to the address and port specified in the serverAddress structure. This allows the server to listen for incoming connections on the specified port. The bind function is called to associate the socket with the address and port, and error handling is included to check if the binding was successful.
     // Check if binding was successful
@@ -115,7 +111,6 @@ void Server::start() {
         WSACleanup();
         return;
     }
-
     //SECTION - Listen for incoming connections
     // Listen for incoming connections on the bound socket. The listen function is called to mark the socket as a passive socket that will be used to accept incoming connection requests. The SOMAXCONN constant is used to specify the maximum length of the queue of pending connections. Error handling is included to check if the listen operation was successful, and a message is printed to indicate that the server is now listening on the specified port.
     // Check if listening was successful
@@ -127,7 +122,6 @@ void Server::start() {
     }
     // Output a message indicating that the server is listening on the specified port
     cout << "Server listening on port " << port << endl;
-
     //SECTION - Accept incoming connections
     // Accept incoming connections in an infinite loop. The accept function is called to wait for and accept a client connection. When a client connects, the server receives the client's address information and creates a new socket for communication with the client. Error handling is included to check if accepting the client connection was successful, and a message is printed to indicate that a client has connected.
     while (true) {
@@ -169,7 +163,6 @@ void Server::start() {
         // Close the client socket after handling the request
         closesocket(clientSocket);
     }
-
     //SECTION - Close the listening socket and clean up Winsock before exiting the server
     // Close the listening socket and clean up Winsock before exiting the server to free up resources. The closesocket function is called to close the listening socket, and the WSACleanup function is called to clean up the Winsock library before the server exits.
     closesocket(listenSocket);

@@ -39,7 +39,6 @@ void Client::run() {
     //SECTION - Main loop for client interaction
     // The client enters a loop where it prompts the user to enter a state abbreviation. If the user types "exit", the client will print a message and exit the loop after a countdown. If the user enters a state abbreviation, the client creates a socket, sets up the server address structure, and attempts to connect to the server. If the connection is successful, it sends the abbreviation to the server, waits for a response, and prints the state name received from the server. After handling each request, it closes the socket and continues to prompt the user for input until they choose to exit.
     while (true) {
-
         //SECTION - Get user input for state abbreviation
         // The user is prompted to enter a state abbreviation or type 'exit' to quit the program. The input is read into the abbreviation variable, which will be used to send the request to the server. If the user types "exit", the client will print a message and exit the loop after a countdown, allowing for a graceful exit from the program.
         string abbreviation;
@@ -74,44 +73,36 @@ void Client::run() {
             break;
         }
 
-        //SECTION - Set up the server address structure
-        // The server address structure is set up to specify the address and port of the server to which the client will connect. The sin_family member is set to AF_INET for IPv4 addressing, the sin_port member is set to the port number (converted to network byte order using htons), and the sin_addr member is set to the IP address of the server (converted from string format using inet_pton). This structure will be used in the connect function to establish a connection to the server.
+        // Set up the server address structure
         sockaddr_in serverAddress;
         serverAddress.sin_family = AF_INET;
         serverAddress.sin_port = htons(port);
         inet_pton(AF_INET, serverIp.c_str(), &serverAddress.sin_addr);
 
-        //SECTION - Connect to the server
-        // The client attempts to connect to the server using the connect function, passing the socket descriptor, the server address structure, and its size. If the connection fails, an error message is printed, the socket is closed, and the loop continues, allowing the user to try again. If the connection is successful, the client proceeds to send the state abbreviation to the server and wait for a response.
-        // Check if the connection to the server was successful, and if not, print an error message, close the socket, and continue to the next iteration of the loop to allow the user to try again
+        // Connect to the server
         if (connect(sock, (sockaddr*)&serverAddress, sizeof(serverAddress)) == SOCKET_ERROR) {
             cerr << "Failed to connect to server" << endl;
             closesocket(sock);
-            continue;
+            continue; // Try again
         }
 
-        //SECTION - Send the abbreviation to the server
-        // The client sends the state abbreviation to the server using the send function. The abbreviation is sent as a C-style string (using c_str()) and its size is specified. If sending the data fails, an error message is printed, the socket is closed, and the loop continues, allowing the user to try again. If the data is sent successfully, the client proceeds to wait for a response from the server.
+        // Send the abbreviation to the server
         send(sock, abbreviation.c_str(), abbreviation.size(), 0);
 
-        //SECTION - Receive the response from the server
-        // The client waits for a response from the server using the recv function. The response is stored in a buffer, and the number of bytes received is checked. If data is received successfully, it is printed to the screen as the state name. If receiving the response fails, an error message is printed. After handling the response, the socket is closed, and the loop continues to prompt the user for input until they choose to exit.
+        // Receive the response from the server
         char buffer[1024] = {0};
         int bytesReceived = recv(sock, buffer, 1024, 0);
-        // Check if data was received successfully from the server, and if so, print the state name received from the server. If receiving the response fails, print an error message indicating that the response could not be received.
         if (bytesReceived > 0) {
             cout << "State name: " << string(buffer, bytesReceived) << endl;
         } else {
             cout << "Failed to receive response from server" << endl;
         }
 
-        //SECTION - Close the socket
-        // After handling the response from the server, the client closes the socket using the closesocket function. This is important to free up system resources and allow for a new connection to be established in the next iteration of the loop when the user inputs another state abbreviation. Closing the socket ensures that the client can continue to interact with the server without running into issues related to too many open sockets or resource leaks.
+        // Close the socket
         closesocket(sock);
         cout << endl;
     }
 
-    //SECTION - Cleanup Winsock
-    // The WSACleanup function is called to clean up the Winsock library before the client program exits. This is important to free up any resources allocated by Winsock during the client's execution. Calling WSACleanup ensures that the Winsock library is properly shut down and that any resources it used are released, preventing potential memory leaks or other issues related to resource management in network programming.
+    // Cleanup Winsock
     WSACleanup();
 }
