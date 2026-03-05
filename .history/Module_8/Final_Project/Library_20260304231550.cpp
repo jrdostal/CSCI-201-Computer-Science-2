@@ -132,8 +132,7 @@ void Library::loadData() {
         else if (genreStr == "Biography") g = Genre::Biography;
         else if (genreStr == "Fiction") g = Genre::Fiction;
 
-        // If statements to determine the type of the book.
-        // Added try/catch validation to resolve error with stoi/stod conversion
+        // If statements to determine the type of the book
         try {
             if (typeStr == "Printed") {
                 books.push_back(new PrintedBook(title, author, g, stoi(extraStr)));
@@ -231,7 +230,7 @@ void Library::checkoutBook(int patronId, string title) {
             // Validate status of book. If not checked out, changes status to checked out.
             if (b->getStatus() == BookStatus::Available) {
                 b->setStatus(BookStatus::CheckedOut);
-
+                
                 // Add the book to the patron's borrowed list
                 it->second.borrowBook(b);
 

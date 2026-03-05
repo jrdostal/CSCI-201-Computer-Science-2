@@ -19,5 +19,11 @@ void EBook::displayInfo() const {
     cout << "File Size: " << EBook::getFileSize() << " MB" << endl;
 };
 
+//SECTION - Get file size function
+// This function returns the file size of the EBook
+double EBook::getFileSize() const {
+    return fileSizeMB;
+};
+
 //SECTION - Destructor for the EBook class
 EBook::~EBook() {};

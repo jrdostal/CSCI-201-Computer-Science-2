@@ -231,7 +231,7 @@ void Library::checkoutBook(int patronId, string title) {
             // Validate status of book. If not checked out, changes status to checked out.
             if (b->getStatus() == BookStatus::Available) {
                 b->setStatus(BookStatus::CheckedOut);
-
+                
                 // Add the book to the patron's borrowed list
                 it->second.borrowBook(b);
 

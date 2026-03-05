@@ -132,8 +132,11 @@ void Library::loadData() {
         else if (genreStr == "Biography") g = Genre::Biography;
         else if (genreStr == "Fiction") g = Genre::Fiction;
 
-        // If statements to determine the type of the book.
-        // Added try/catch validation to resolve error with stoi/stod conversion
+        // If statements to determine the type of the book
+        if (typeStr == "Printed") {
+            books.push_back(new PrintedBook(title, author, g, stoi(extraStr)));
+        } else if (typeStr == "EBook") {
+            books.push_back(new EBook(title, author, g, stod(extraStr)));
         try {
             if (typeStr == "Printed") {
                 books.push_back(new PrintedBook(title, author, g, stoi(extraStr)));
@@ -169,6 +172,8 @@ void Library::loadData() {
         // Read rest of line as name
         getline(ss, name);
         if (!idStr.empty() && !name.empty()) {
+            int id = stoi(idStr);
+            patrons.emplace(id, Patron(name, id));
             try {
                 int id = stoi(idStr);
                 patrons.emplace(id, Patron(name, id));
@@ -203,6 +208,7 @@ void Library::loadData() {
 
             // If the transactions file is not empty, add a new transaction at the end of the file.
             if (!pidStr.empty()) {
+                transactions.push_back(new Transaction(stoi(pidStr), bookTitle));
                 try {
                     transactions.push_back(new Transaction(stoi(pidStr), bookTitle));
                 } catch (...) {
@@ -231,7 +237,7 @@ void Library::checkoutBook(int patronId, string title) {
             // Validate status of book. If not checked out, changes status to checked out.
             if (b->getStatus() == BookStatus::Available) {
                 b->setStatus(BookStatus::CheckedOut);
-
+                
                 // Add the book to the patron's borrowed list
                 it->second.borrowBook(b);
 

@@ -106,7 +106,7 @@ void Library::loadData() {
     // Loop to read data from the file
     while (getline(file, line)) {
 
-        // Validate if the file is empty. If the file is empty, continue loading data.
+        // Validate if the file is empty. If the file is empty, continue loading data. If the file is not empty, displays the contents of the file and exits the program.
         if (line.empty() == true) continue;
 
         // Read data from the file and store it in the temporary variable.
@@ -132,16 +132,11 @@ void Library::loadData() {
         else if (genreStr == "Biography") g = Genre::Biography;
         else if (genreStr == "Fiction") g = Genre::Fiction;
 
-        // If statements to determine the type of the book.
-        // Added try/catch validation to resolve error with stoi/stod conversion
-        try {
-            if (typeStr == "Printed") {
-                books.push_back(new PrintedBook(title, author, g, stoi(extraStr)));
-            } else if (typeStr == "EBook") {
-                books.push_back(new EBook(title, author, g, stod(extraStr)));
-            }
-        } catch (...) {
-            continue;
+        // If statements to determine the type of the book
+        if (typeStr == "Printed") {
+            books.push_back(new PrintedBook(title, author, g, stoi(extraStr)));
+        } else if (typeStr == "EBook") {
+            books.push_back(new EBook(title, author, g, stod(extraStr)));
         }
     }
 
@@ -169,12 +164,8 @@ void Library::loadData() {
         // Read rest of line as name
         getline(ss, name);
         if (!idStr.empty() && !name.empty()) {
-            try {
-                int id = stoi(idStr);
-                patrons.emplace(id, Patron(name, id));
-            } catch (...) {
-                continue;
-            }
+            int id = stoi(idStr);
+            patrons.emplace(id, Patron(name, id));
         }
     }
 
@@ -203,11 +194,7 @@ void Library::loadData() {
 
             // If the transactions file is not empty, add a new transaction at the end of the file.
             if (!pidStr.empty()) {
-                try {
-                    transactions.push_back(new Transaction(stoi(pidStr), bookTitle));
-                } catch (...) {
-                    continue;
-                }
+                transactions.push_back(new Transaction(stoi(pidStr), bookTitle));
             }
         }
     }
@@ -217,8 +204,7 @@ void Library::loadData() {
 void Library::checkoutBook(int patronId, string title) {
 
     // Validate patron exists
-    auto it = patrons.find(patronId);
-    if (it == patrons.end()) {
+    if (patrons.find(patronId) == patrons.end()) {
         throw runtime_error("Patron ID not found.");
     }
 
@@ -231,10 +217,6 @@ void Library::checkoutBook(int patronId, string title) {
             // Validate status of book. If not checked out, changes status to checked out.
             if (b->getStatus() == BookStatus::Available) {
                 b->setStatus(BookStatus::CheckedOut);
-
-                // Add the book to the patron's borrowed list
-                it->second.borrowBook(b);
-
                 // Log transaction showing change from available to checked out.
                 transactions.push_back(new Transaction(patronId, title));
                 saveData();
@@ -260,12 +242,6 @@ void Library::checkoutBook(int patronId, string title) {
 //SECTION - Return Book function
 void Library::returnBook(int patronId, string title) {
 
-    // Validate patron exists
-    auto it = patrons.find(patronId);
-    if (it == patrons.end()) {
-        throw runtime_error("Patron ID not found.");
-    }
-
     // Loop to get list of books in library inventory.
     for (Book* b : books) {
 
@@ -274,15 +250,6 @@ void Library::returnBook(int patronId, string title) {
 
             // Change the book status back to available
             b->setStatus(BookStatus::Available);
-
-            // Attempt to remove the book from the patron's borrowed list.
-            // We use a try-catch block here because if the program was restarted, 
-            // the patron's runtime list might be empty even if the book is checked out.
-            try {
-                it->second.returnBook(b);
-            } catch (...) {
-                // Ignore error if book not found in patron's list (e.g. persistence gap)
-            }
 
             // Log transaction showing change from checked out to available.
             transactions.push_back(new Transaction(patronId, title, true));
